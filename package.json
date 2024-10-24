@@ -11,7 +11,11 @@
     "Nick Baugh <niftylettuce@gmail.com> (http://niftylettuce.com/)",
     "yrambler2001 <yrambler2001@gmail.com> (https://yrambler2001.me/)"
   ],
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^9.13.0",
+    "neostandard": "^0.11.7"
+  },
+  "type": "module",
   "engines": {
     "node": ">= 10"
   },
@@ -106,11 +110,15 @@
   "license": "MIT",
   "module": "lib/index.mjs",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/qgustavor/later"
   },
-  "scripts": {}
+  "scripts": {
+    "test": "eslint",
+    "fix": "eslint --fix"
+  }
 }

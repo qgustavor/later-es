@@ -34,7 +34,7 @@ export const TOKENTYPES = {
   onthe: /^on the\b/,
   on: /^on\b/,
   through: /(-|^(to|through)\b)/
-};
+}
 export const NAMES = {
   jan: 1,
   feb: 2,
@@ -63,4 +63,4 @@ export const NAMES = {
   thi: 3,
   '4th': 4,
   for: 4
-};
+}
