@@ -1,3 +1,7 @@
+import * as modifiers from './modifiers.mjs'
+import * as array from './array.mjs'
+import { NEVER, SEC } from './constants.mjs'
+
 export function compile (schedDef) {
   const constraints = [];
   let constraintsLength = 0;
@@ -8,7 +12,7 @@ export function compile (schedDef) {
     const mod = nameParts[1];
     const vals = schedDef[key];
     const constraint = mod
-      ? later.modifier[mod](later[name], vals)
+      ? modifiers[mod](later[name], vals)
       : later[name];
     constraints.push({
       constraint,
@@ -38,7 +42,7 @@ export function compile (schedDef) {
   return {
     start(dir, startDate) {
       let next = startDate;
-      const nextValue = later.array[dir];
+      const nextValue = array[dir];
       let maxAttempts = 1e3;
       let done;
       while (maxAttempts-- && !done && next) {
@@ -56,7 +60,7 @@ export function compile (schedDef) {
         }
       }
 
-      if (next !== later.NEVER) {
+      if (next !== NEVER) {
         next =
           dir === 'next'
             ? tickConstraint.start(next)
@@ -67,7 +71,7 @@ export function compile (schedDef) {
     },
     end(dir, startDate) {
       let result;
-      const nextValue = later.array[dir + 'Invalid'];
+      const nextValue = array[dir + 'Invalid'];
       const compare = compareFn(dir);
       for (let i = constraintsLength - 1; i >= 0; i--) {
         const { constraint } = constraints[i];
@@ -88,8 +92,8 @@ export function compile (schedDef) {
     tick(dir, date) {
       return new Date(
         dir === 'next'
-          ? tickConstraint.end(date).getTime() + later.SEC
-          : tickConstraint.start(date).getTime() - later.SEC
+          ? tickConstraint.end(date).getTime() + SEC
+          : tickConstraint.start(date).getTime() - SEC
       );
     },
     tickStart(date) {

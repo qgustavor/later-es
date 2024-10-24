@@ -1,3 +1,5 @@
+import * as modifiers from './modifiers.mjs'
+
 export function cron (expr, hasSeconds) {
   const NAMES = {
     JAN: 1,
@@ -346,7 +348,7 @@ export function recur () {
       return this;
     },
     customModifier(id, vals) {
-      const custom = later.modifier[id];
+      const custom = modifiers[id];
       if (!custom)
         throw new Error('Custom modifier ' + id + ' not recognized!');
       modifier = id;

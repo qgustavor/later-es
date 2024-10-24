@@ -1,3 +1,6 @@
+import { compile } from './compile.mjs'
+import { NEVER, SEC } from './constants.mjs'
+
 export function schedule (sched) {
   if (!sched) throw new Error('Missing schedule definition.');
   if (!sched.schedules)
@@ -7,11 +10,11 @@ export function schedule (sched) {
   const exceptions = [];
   const exceptionsLength = sched.exceptions ? sched.exceptions.length : 0;
   for (let i = 0; i < schedulesLength; i++) {
-    schedules.push(later.compile(sched.schedules[i]));
+    schedules.push(compile(sched.schedules[i]));
   }
 
   for (let j = 0; j < exceptionsLength; j++) {
-    exceptions.push(later.compile(sched.exceptions[j]));
+    exceptions.push(compile(sched.exceptions[j]));
   }
 
   function getInstances(dir, count, startDate, endDate, isRange) {
@@ -61,11 +64,11 @@ export function schedule (sched) {
               end
                 ? new Date(
                     endDate
-                      ? Math.max(endDate, end.getTime() + later.SEC)
-                      : end.getTime() + later.SEC
+                      ? Math.max(endDate, end.getTime() + SEC)
+                      : end.getTime() + SEC
                   )
                 : undefined,
-              new Date(Math.min(startDate, next.getTime() + later.SEC))
+              new Date(Math.min(startDate, next.getTime() + SEC))
             ];
         if (lastResult && r[rStart].getTime() === lastResult[rEnd].getTime()) {
           lastResult[rEnd] = r[rEnd];
@@ -98,7 +101,7 @@ export function schedule (sched) {
     }
 
     return results.length === 0
-      ? later.NEVER
+      ? NEVER
       : count === 1
       ? results[0]
       : results;
@@ -132,7 +135,7 @@ export function schedule (sched) {
     for (let i = 0, { length } = schedArray; i < length; i++) {
       const nextStart = schedArray[i].start(dir, startDate);
       if (!nextStart) {
-        rangesArray[i] = later.NEVER;
+        rangesArray[i] = NEVER;
       } else {
         rangesArray[i] = [nextStart, schedArray[i].end(dir, nextStart)];
       }
@@ -145,7 +148,7 @@ export function schedule (sched) {
       if (rangesArray[i] && !compare(rangesArray[i][0], startDate)) {
         const nextStart = schedArray[i].start(dir, startDate);
         if (!nextStart) {
-          rangesArray[i] = later.NEVER;
+          rangesArray[i] = NEVER;
         } else {
           rangesArray[i] = [nextStart, schedArray[i].end(dir, nextStart)];
         }
@@ -257,7 +260,7 @@ export function schedule (sched) {
 
   return {
     isValid(d) {
-      return getInstances('next', 1, d, d) !== later.NEVER;
+      return getInstances('next', 1, d, d) !== NEVER;
     },
     next(count, startDate, endDate) {
       return getInstances('next', count || 1, startDate, endDate);

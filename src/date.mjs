@@ -1,3 +1,6 @@
+import { SEC } from './constants.mjs'
+import { day } from './parts.mjs'
+
 export class TimezonedDate (useLocalTime) {
   constructor () {
     this.build = useLocalTime
@@ -35,14 +38,14 @@ export class TimezonedDate (useLocalTime) {
     const cur = constraint.val(d);
     const max = constraint.extent(d)[1];
     return (value || max) <= cur || value > max
-      ? new Date(period.end(d).getTime() + later.SEC)
+      ? new Date(period.end(d).getTime() + SEC)
       : period.start(d);
   }
 
   prev (Y, M, D, h, m, s) {
     const { length } = arguments;
     M = length < 2 ? 11 : M - 1;
-    D = length < 3 ? later.D.extent(this.next(Y, M + 1))[1] : D;
+    D = length < 3 ? day.extent(this.next(Y, M + 1))[1] : D;
     h = length < 4 ? 23 : h;
     m = length < 5 ? 59 : m;
     s = length < 6 ? 59 : s;

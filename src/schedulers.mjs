@@ -1,6 +1,7 @@
+import { schedule } from './schedule.mjs'
 
 export function setTimeout (fn, sched, timezone) {
-  const s = later.schedule(sched);
+  const s = schedule(sched);
   let t;
   if (fn) {
     scheduleTimeout();
@@ -69,12 +70,12 @@ export function setInterval (fn, sched, timezone) {
     return;
   }
 
-  let t = later.setTimeout(scheduleTimeout, sched, timezone);
+  let t = setTimeout(scheduleTimeout, sched, timezone);
   let done = t.isDone();
   function scheduleTimeout() {
     if (!done) {
       fn();
-      t = later.setTimeout(scheduleTimeout, sched, timezone);
+      t = setTimeout(scheduleTimeout, sched, timezone);
     }
   }
 
