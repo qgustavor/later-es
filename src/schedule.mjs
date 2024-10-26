@@ -19,11 +19,11 @@ export function schedule (sched, timezone) {
   const exceptions = []
   const exceptionsLength = sched.exceptions ? sched.exceptions.length : 0
   for (let i = 0; i < schedulesLength; i++) {
-    schedules.push(compile(sched.schedules[i]), timezone)
+    schedules.push(compile(sched.schedules[i], timezone))
   }
 
   for (let j = 0; j < exceptionsLength; j++) {
-    exceptions.push(compile(sched.exceptions[j]), timezone)
+    exceptions.push(compile(sched.exceptions[j], timezone))
   }
 
   function getInstances (dir, count, startDate, endDate, isRange) {
@@ -40,7 +40,7 @@ export function schedule (sched, timezone) {
     const rStart = isForward ? 0 : 1
     const rEnd = isForward ? 1 : 0
     startDate = startDate ? new Date(startDate) : new Date()
-    if (!startDate || !startDate.getTime()) { throw new Error('Invalid start date.') }
+    if (!startDate || !startDate.getTime()) throw new Error('Invalid start date.')
     setNextStarts(dir, schedules, schedStarts, startDate)
     setRangeStarts(dir, exceptions, exceptStarts, startDate)
     while (
@@ -153,11 +153,11 @@ export function schedule (sched, timezone) {
     const compare = compareFn(dir)
     for (let i = 0, { length } = schedArray; i < length; i++) {
       if (rangesArray[i] && !compare(rangesArray[i][0], startDate)) {
-        const nextStart = schedArray[i].start(dir, timezone, startDate)
+        const nextStart = schedArray[i].start(dir, startDate, timezone)
         if (!nextStart) {
           rangesArray[i] = NEVER
         } else {
-          rangesArray[i] = [nextStart, schedArray[i].end(dir, timezone, nextStart)]
+          rangesArray[i] = [nextStart, schedArray[i].end(dir, nextStart, timezone)]
         }
       }
     }
@@ -168,7 +168,7 @@ export function schedule (sched, timezone) {
       if (startsArray[i] && startsArray[i].getTime() === startDate.getTime()) {
         startsArray[i] = schedArray[i].start(
           dir, timezone,
-          schedArray[i].tick(dir, timezone, startDate)
+          schedArray[i].tick(dir, startDate, timezone)
         )
       }
     }

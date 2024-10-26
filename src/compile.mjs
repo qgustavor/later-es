@@ -50,7 +50,7 @@ export function compile (schedDef, timezone) {
   }
 
   return {
-    start (dir, startDate) {
+    start (dir, timezone, startDate) {
       let next = startDate
       const nextValue = array[dir]
       let maxAttempts = 1e3

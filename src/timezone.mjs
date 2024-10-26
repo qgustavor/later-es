@@ -1,22 +1,43 @@
 import { SEC } from './constants.mjs'
-import { day } from './parts.mjs'
+import { day } from './parts/day.mjs'
 
 export class Timezone {
-  constructor (useLocalTime) {
-    this.build = useLocalTime
-      ? (Y, M, D, h, m, s) => new Date(Y, M, D, h, m, s)
-      : (Y, M, D, h, m, s) => new Date(Date.UTC(Y, M, D, h, m, s))
+  constructor (isLocalTime) {
+    this.isUTC = !isLocalTime
+  }
 
-    const get = useLocalTime ? 'get' : 'getUTC'
-    const d = Date.prototype
-    this.getYear = d[get + 'FullYear']
-    this.getMonth = d[get + 'Month']
-    this.getDate = d[get + 'Date']
-    this.getDay = d[get + 'Day']
-    this.getHour = d[get + 'Hours']
-    this.getMin = d[get + 'Minutes']
-    this.getSec = d[get + 'Seconds']
-    this.isUTC = !useLocalTime
+  build (Y, M, D, h, m, s) {
+    return this.isUTC
+      ? new Date(Date.UTC(Y, M, D, h, m, s))
+      : new Date(Y, M, D, h, m, s)
+  }
+
+  getYear (date) {
+    return this.isUTC ? date.getUTCFullYear() : date.getFullYear()
+  }
+
+  getMonth (date) {
+    return this.isUTC ? date.getUTCMonth() : date.getMonth()
+  }
+
+  getDate (date) {
+    return this.isUTC ? date.getUTCDate() : date.getDate()
+  }
+
+  getDay (date) {
+    return this.isUTC ? date.getUTCDay() : date.getDay()
+  }
+
+  getHour (date) {
+    return this.isUTC ? date.getUTCHours() : date.getHours()
+  }
+
+  getMin (date) {
+    return this.isUTC ? date.getUTCMinutes() : date.getMinutes()
+  }
+
+  getSec (date) {
+    return this.isUTC ? date.getUTCSeconds() : date.getSeconds()
   }
 
   next (Y, M, D, h, m, s) {
