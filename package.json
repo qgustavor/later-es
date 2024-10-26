@@ -4,7 +4,7 @@
   "version": "5.0.0",
   "author": "BunKat <bill@levelstory.com>",
   "bugs": {
-    "url": "https://github.com/qgustavor/later/issues"
+    "url": "https://github.com/qgustavor/later-es/issues"
   },
   "contributors": [
     "BunKat <bill@levelstory.com>",
@@ -20,10 +20,9 @@
     "node": ">= 10"
   },
   "files": [
-    "lib",
-    "dist"
+    "src"
   ],
-  "homepage": "https://github.com/qgustavor/later",
+  "homepage": "https://github.com/qgustavor/later-es",
   "keywords": [
     "agenda",
     "async",
@@ -115,7 +114,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/qgustavor/later"
+    "url": "https://github.com/qgustavor/later-es"
   },
   "scripts": {
     "test": "eslint",
