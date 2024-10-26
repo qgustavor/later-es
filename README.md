@@ -27,7 +27,7 @@ Types of schedules supported by *Later*:
 
 ## Documentation
 
-WIP. In the meanwhile see [parent fork's documentation](https://breejs.github.io/later/).
+WIP. In the meanwhile see [parent fork's documentation](https://breejs.github.io/later/), but check the code or the library on a REPL since A LOT of refactoring was done in order to convert the library to ES Modules and allow for tree shaking.
 
 ## Install
 
