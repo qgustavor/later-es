@@ -9,15 +9,18 @@ export const minute = {
   name: 'minute',
   range: 60,
   val (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return d.minute || (d.minute = timezone.getMin(d))
   },
   isValid (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     return minute.val(d, timezone) === value
   },
-  extent (d, timezone) {
+  extent () {
     return [0, 59]
   },
   start (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.mStart ||
       (d.mStart = timezone.next(
@@ -30,6 +33,7 @@ export const minute = {
     )
   },
   end (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.mEnd ||
       (d.mEnd = timezone.prev(
@@ -42,6 +46,7 @@ export const minute = {
     )
   },
   next (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     const m = minute.val(d, timezone)
     const s = second.val(d, timezone)
     const inc = value > 59 ? 60 - m : value <= m ? 60 - m + value : value - m
@@ -53,6 +58,7 @@ export const minute = {
     return next
   },
   prev (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     value = value > 59 ? 59 : value
     return timezone.prev(
       year.val(d, timezone),

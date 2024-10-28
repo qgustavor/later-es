@@ -7,6 +7,7 @@ export const weekOfMonth = {
   name: 'week of month',
   range: 604800,
   val (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.weekOfMonth ||
       (d.weekOfMonth =
@@ -17,9 +18,11 @@ export const weekOfMonth = {
     )
   },
   isValid (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     return weekOfMonth.val(d, timezone) === (value || weekOfMonth.extent(d, timezone)[1])
   },
   extent (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.wmExtent ||
       (d.wmExtent = [
@@ -32,6 +35,7 @@ export const weekOfMonth = {
     )
   },
   start (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.wmStart ||
       (d.wmStart = timezone.next(
@@ -42,6 +46,7 @@ export const weekOfMonth = {
     )
   },
   end (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.wmEnd ||
       (d.wmEnd = timezone.prev(
@@ -52,25 +57,27 @@ export const weekOfMonth = {
     )
   },
   next (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     value = value > weekOfMonth.extent(d, timezone)[1] ? 1 : value
     const nextMonth = timezone.nextRollover(d, timezone, value, weekOfMonth, month)
     const wmMax = weekOfMonth.extent(nextMonth)[1]
     value = value > wmMax ? 1 : value || wmMax
     return timezone.next(
-      year.val(nextMonth),
-      month.val(nextMonth),
-      Math.max(1, (value - 1) * 7 - (dayOfWeek.val(nextMonth) - 2))
+      year.val(nextMonth, timezone),
+      month.val(nextMonth, timezone),
+      Math.max(1, (value - 1) * 7 - (dayOfWeek.val(nextMonth, timezone) - 2))
     )
   },
   prev (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     const prevMonth = timezone.prevRollover(d, timezone, value, weekOfMonth, month)
     const wmMax = weekOfMonth.extent(prevMonth)[1]
     value = value > wmMax ? wmMax : value || wmMax
     return weekOfMonth.end(
       timezone.next(
-        year.val(prevMonth),
-        month.val(prevMonth),
-        Math.max(1, (value - 1) * 7 - (dayOfWeek.val(prevMonth) - 2))
+        year.val(prevMonth, timezone),
+        month.val(prevMonth, timezone),
+        Math.max(1, (value - 1) * 7 - (dayOfWeek.val(prevMonth, timezone) - 2))
       )
     )
   }

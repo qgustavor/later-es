@@ -62,7 +62,7 @@ export function compile (schedDef, timezone) {
           const curValue = constraint.val(next, timezone)
           const extent = constraint.extent(next, timezone)
           const newValue = nextValue(curValue, constraints[i].vals, extent)
-          if (!constraint.isValid(next, newValue)) {
+          if (!constraint.isValid(next, timezone, newValue)) {
             next = constraint[dir](next, timezone, newValue)
             done = false
             break
@@ -73,8 +73,8 @@ export function compile (schedDef, timezone) {
       if (next !== NEVER) {
         next =
           dir === 'next'
-            ? tickConstraint.start(next)
-            : tickConstraint.end(next)
+            ? tickConstraint.start(next, timezone)
+            : tickConstraint.end(next, timezone)
       }
 
       return next

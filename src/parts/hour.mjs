@@ -6,15 +6,18 @@ export const hour = {
   name: 'hour',
   range: 3600,
   val (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return d.hour || (d.hour = timezone.getHour(d))
   },
   isValid (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     return hour.val(d, timezone) === value
   },
   extent () {
     return [0, 23]
   },
   start (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.hStart ||
       (d.hStart = timezone.next(
@@ -26,6 +29,7 @@ export const hour = {
     )
   },
   end (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
       d.hEnd ||
       (d.hEnd = timezone.prev(
@@ -37,6 +41,7 @@ export const hour = {
     )
   },
   next (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     value = value > 23 ? 0 : value
     let next = timezone.next(
       year.val(d, timezone),
@@ -46,9 +51,9 @@ export const hour = {
     )
     if (!timezone.isUTC && next.getTime() <= d.getTime()) {
       next = timezone.next(
-        year.val(next),
-        month.val(next),
-        day.val(next),
+        year.val(next, timezone),
+        month.val(next, timezone),
+        day.val(next, timezone),
         value + 1
       )
     }
@@ -56,6 +61,7 @@ export const hour = {
     return next
   },
   prev (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     value = value > 23 ? 23 : value
     return timezone.prev(
       year.val(d, timezone),

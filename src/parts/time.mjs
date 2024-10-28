@@ -9,24 +9,26 @@ export const time = {
   name: 'time',
   range: 1,
   val (d, timezone) {
+    if (!timezone) throw Error('Missing timezone object')
     return (
-      d.time ||
-      (d.time = hour.val(d, timezone) * 3600 + minute.val(d, timezone) * 60 + second.val(d, timezone))
+      d.time || (d.time = hour.val(d, timezone) * 3600 + minute.val(d, timezone) * 60 + second.val(d, timezone))
     )
   },
   isValid (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     return time.val(d, timezone) === value
   },
   extent () {
     return [0, 86399]
   },
-  start (d, timezone) {
+  start (d) {
     return d
   },
-  end (d, timezone) {
+  end (d) {
     return d
   },
   next (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     value = value > 86399 ? 0 : value
     let next = timezone.next(
       year.val(d, timezone),
@@ -38,11 +40,11 @@ export const time = {
     )
     if (!timezone.isUTC && next.getTime() < d.getTime()) {
       next = timezone.next(
-        year.val(next),
-        month.val(next),
-        day.val(next),
-        hour.val(next),
-        minute.val(next),
+        year.val(next, timezone),
+        month.val(next, timezone),
+        day.val(next, timezone),
+        hour.val(next, timezone),
+        minute.val(next, timezone),
         value + 7200
       )
     }
@@ -50,6 +52,7 @@ export const time = {
     return next
   },
   prev (d, timezone, value) {
+    if (!timezone) throw Error('Missing timezone object')
     value = value > 86399 ? 86399 : value
     return timezone.next(
       year.val(d, timezone),
