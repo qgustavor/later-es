@@ -107,7 +107,7 @@
     "workers"
   ],
   "license": "MIT",
-  "module": "lib/index.mjs",
+  "module": "src/index.mjs",
   "publishConfig": {
     "access": "public",
     "provenance": true
